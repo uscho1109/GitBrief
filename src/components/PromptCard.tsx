@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, ExternalLink, Star, Package } from 'lucide-react';
+import { ExternalLink, Star, Package, CodeXml } from 'lucide-react';
 import { RepositorySummary } from '../types';
 
 export const PromptCard: React.FC<{ repo: RepositorySummary; onClick: () => void }> = ({ repo, onClick }) => {
