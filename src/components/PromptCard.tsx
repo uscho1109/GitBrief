@@ -22,7 +22,7 @@ export const PromptCard: React.FC<{ repo: RepositorySummary; onClick: () => void
         </span>
         <div className="flex gap-2">
           <button className="p-1.5 hover:bg-[#30363d] rounded-md transition-colors" title="View on GitHub">
-            <Github size={16} className="text-gray-400 group-hover:text-white" />
+            <CodeXml size={16} className="text-gray-400 group-hover:text-white" />
           </button>
           <button className="p-1.5 hover:bg-[#30363d] rounded-md transition-colors" title="Open Link">
             <ExternalLink size={16} className="text-gray-400 group-hover:text-[#00F5FF]" />

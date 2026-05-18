@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "postcss.config.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -16,12 +16,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/uscho1109/GitBrief/issues"
   },
   "homepage": "https://github.com/uscho1109/GitBrief#readme",
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.0",
     "@vitejs/plugin-react": "^6.0.2",
     "autoprefixer": "^10.5.0",
     "postcss": "^8.5.14",

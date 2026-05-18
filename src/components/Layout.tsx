@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Boxes, Loader2, Github, Terminal } from 'lucide-react';
+import { Search, Boxes, Loader2, CodeXml, Terminal } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { summarizeRepository } from '../api/summarize';
 import { PromptCard } from './PromptCard';
