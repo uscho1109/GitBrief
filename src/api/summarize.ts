@@ -16,13 +16,14 @@ export const summarizeRepository = async (url: string): Promise<RepositorySummar
   try {
     const prompt = `
       [ROLE]
-      너는 깃허브 리포지토리를 분석하여 개발자에게 인사이트를 제공하는 "친절하고 유능한 AI 시니어 개발자 멘토"야.
+      귀하는 사용자가 입력한 깃허브 리포지토리를 객관적이고 정확하게 분석하여 보고하는 "전문 AI 텍스트 비서"입니다. 
 
       [STYLE GUIDE]
-      1. 말투: 딱딱한 봇이 아닌, 후배의 성장을 돕는 위트 있는 동료 개발자의 톤 (~해요, ~입니다).
-      2. 비유: 전문 개념은 '구워내다', '나침반' 같은 직관적인 비유를 섞어줘.
-      3. 구조: 줄글은 피하고 대제목(##), 소제목(###), 구분선(---), 볼드를 써서 가독성을 극대화해.
-      4. 팩트: 오직 제공된 레포지토리 정보(README)를 기반으로만 분석해. 정보가 없으면 솔직하게 없다고 말해.
+      1. 어조: 감정 표현, 서술형 문장, 불필요한 미사여구를 모두 배제하십시오. "~입니다", "~함" 형태의 담백한 어조를 사용하십시오.
+      2. 금지사항: 이모티콘을 완전히 배제하십시오. "반가워요", "멘토입니다" 등 친근한 표현을 절대 금지합니다.
+      3. 구조: 대제목(##), 소제목(###), 구분선(---)을 사용하여 보고서 형태로 구조화하십시오.
+      4. 가공: 모든 정보는 불릿 포인트(*)와 굵은 글씨(**굵게**)를 조합하여 출력하십시오.
+      5. 팩트: 오직 제공된 레포지토리 정보(README)를 기반으로만 분석하십시오. 정보가 없으면 "해당 리포지토리 내 정보 없음"으로 명시하십시오.
 
       [ANALYSIS TARGET]
       GitHub Repo URL: ${url}
@@ -30,11 +31,28 @@ export const summarizeRepository = async (url: string): Promise<RepositorySummar
       [OUTPUT FORMAT JSON]
       {
         "name": "프로젝트 이름",
-        "oneLiner": "멘토의 위트 있는 한 줄 정의",
-        "techTags": ["주요기술1", "주요기술2"],
+        "oneLiner": "객관적으로 요약된 프로젝트 정의",
+        "techTags": ["기술1", "기술2"],
         "environment": "Docker | Node.js | Python | Go | Rust | Other",
-        "summary": "마크다운으로 작성된 멘토링 스타일의 상세 분석 보고서"
+        "summary": "지정된 보고서 포맷에 맞춘 마크다운 분석 본문"
       }
+
+      [REPORT TEMPLATE]
+      ## 프로젝트 개요
+      (내용)
+      ---
+      ## 기술 스택
+      * **언어 및 프레임워크:** (내용)
+      * **스타일 및 UI:** (내용)
+      * **런타임 및 백엔드:** (내용)
+      ---
+      ## 핵심 기능
+      * **(기능명):** (설명)
+      ---
+      ## 설치 및 실행 방법
+      \`\`\`bash
+      (명령어)
+      \`\`\`
     `;
 
     let resultData;
@@ -51,34 +69,37 @@ export const summarizeRepository = async (url: string): Promise<RepositorySummar
       const text = data.candidates[0].content.parts[0].text;
       resultData = JSON.parse(text);
     } else {
-      // Mock Data with Mentor Persona
+      // Mock Data with Professional Secretary Persona
       resultData = {
         name: repo,
-        oneLiner: `🚀 ${repo}는 당신의 개발 여정에서 든든한 등대 같은 프로젝트가 될 거예요!`,
-        techTags: ["TypeScript", "React", "Next.js"],
+        oneLiner: `${repo} 리포지토리는 오픈소스 기반의 기술 분석 솔루션임.`,
+        techTags: ["TypeScript", "Vite", "Tailwind CSS"],
         environment: "Node.js",
-        summary: `## 👋 반가워요! 당신의 시니어 멘토입니다.
-
-오늘 제가 분석해본 레포지토리는 바로 **${repo}**입니다. 코드를 살펴보니 정말 흥미로운 구석이 많더군요! 후배님께 도움이 될 만한 핵심 내용들만 '알잘딱'하게 정리해봤어요.
-
----
-
-### 🛠 기술 스택: 이 프로젝트의 '레시피'
-이 프로젝트는 다음과 같은 재료들로 아주 맛있게 구워졌네요.
-* **언어의 나침반**: TypeScript (타입 안전성을 꽉 잡았네요!)
-* **UI의 조각가**: React & Tailwind CSS
-* **서버의 엔진**: Node.js
-
-### 💡 핵심 기능: 이것만은 꼭 보세요!
-1. **지능형 분석**: README를 마치 커피 한 잔 마시듯 부드럽게 읽고 핵심만 뽑아내요.
-2. **실시간 소통**: 동료들과 즉시 대화할 수 있는 '라이브 인벤토리' 창이 압권이죠.
+        summary: `## 프로젝트 개요
+GitHub 리포지토리의 README 및 소스 코드를 분석하여 구조화된 보고서를 생성하는 도구임.
 
 ---
 
-### 📝 멘토의 한마디
-이 프로젝트의 구조는 굉장히 정돈되어 있어요. 특히 관심사 분리가 잘 되어 있어 유지보수 측면에서 배울 점이 아주 많습니다. 한번 깊게 파헤쳐 보시는 걸 강력 추천해요! 
+## 기술 스택
+* **언어 및 프레임워크:** TypeScript, React 19
+* **스타일 및 UI:** Tailwind CSS v4, Lucide React
+* **런타임 및 백엔드:** Node.js, Vite
 
-궁금한 게 더 있다면 언제든 물어보세요. 같이 성장해봐요! 💪`
+---
+
+## 핵심 기능
+* **자동 요약 분석:** 입력된 URL의 README 텍스트를 정제된 데이터로 변환함.
+* **기술 스택 분류:** 프로젝트 내 사용된 주요 의존성을 식별하여 보고함.
+* **실시간 통신:** 사용자 간 텍스트 기반 정보 공유 기능을 제공함.
+
+---
+
+## 설치 및 실행 방법
+\`\`\`bash
+git clone ${url}
+npm install
+npm run build
+\`\`\``
       };
     }
 
@@ -98,7 +119,7 @@ export const summarizeRepository = async (url: string): Promise<RepositorySummar
     mockCache[url] = newSummary;
     return newSummary;
   } catch (err) {
-    console.error('Mentor API Error:', err);
+    console.error('Secretary API Error:', err);
     throw err;
   }
 };
