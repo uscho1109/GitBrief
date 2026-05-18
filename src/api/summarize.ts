@@ -10,38 +10,33 @@ export const summarizeRepository = async (url: string): Promise<RepositorySummar
     return mockCache[url];
   }
 
-  // 1. GitHub API를 통해 README 및 메타데이터 가져오기 (실제 구현 시 Octokit 사용 권장)
-  // 여기서는 URL에서 owner/repo 추출하여 시뮬레이션
   const [, , , owner, repo] = url.split('/');
-  
   if (!owner || !repo) throw new Error('Invalid GitHub URL');
 
   try {
-    // 2. Gemini API 호출을 위한 프롬프트 구성
     const prompt = `
-      너는 세계 최고의 오픈소스 분석가이자 기술 작가야. 
-      다음 GitHub 레포지토리 정보를 바탕으로 한국어 상세 요약 보고서를 작성해줘.
-      레포지토리 주소: ${url}
+      [ROLE]
+      너는 깃허브 리포지토리를 분석하여 개발자에게 인사이트를 제공하는 "친절하고 유능한 AI 시니어 개발자 멘토"야.
 
-      [요청 사항]
-      1. 프로젝트의 한 줄 정의 (One-liner)를 작성할 것.
-      2. 사용된 기술 스택을 리스트 형태로 상세히 나열할 것.
-      3. 핵심 기능을 3~5가지로 요약하여 설명할 것.
-      4. 전체 내용을 Markdown 형식으로 풍부하게 작성할 것 (## 섹션 구분 사용).
-      5. 답변은 반드시 '한국어'로만 작성할 것.
-      6. 배포 환경(Docker, Node.js, Python 등) 중 가장 적합한 하나를 골라줄 것.
+      [STYLE GUIDE]
+      1. 말투: 딱딱한 봇이 아닌, 후배의 성장을 돕는 위트 있는 동료 개발자의 톤 (~해요, ~입니다).
+      2. 비유: 전문 개념은 '구워내다', '나침반' 같은 직관적인 비유를 섞어줘.
+      3. 구조: 줄글은 피하고 대제목(##), 소제목(###), 구분선(---), 볼드를 써서 가독성을 극대화해.
+      4. 팩트: 오직 제공된 레포지토리 정보(README)를 기반으로만 분석해. 정보가 없으면 솔직하게 없다고 말해.
 
-      [출력 형식 JSON]
+      [ANALYSIS TARGET]
+      GitHub Repo URL: ${url}
+
+      [OUTPUT FORMAT JSON]
       {
         "name": "프로젝트 이름",
-        "oneLiner": "한 줄 정의",
-        "techTags": ["태그1", "태그2"],
+        "oneLiner": "멘토의 위트 있는 한 줄 정의",
+        "techTags": ["주요기술1", "주요기술2"],
         "environment": "Docker | Node.js | Python | Go | Rust | Other",
-        "summary": "마크다운 요약 본문"
+        "summary": "마크다운으로 작성된 멘토링 스타일의 상세 분석 보고서"
       }
     `;
 
-    // 3. 실제 Gemini API 호출 (API_KEY가 없을 경우 Mock 데이터 반환)
     let resultData;
     if (GEMINI_API_KEY) {
       const response = await fetch(`${API_URL}?key=${GEMINI_API_KEY}`, {
@@ -56,13 +51,34 @@ export const summarizeRepository = async (url: string): Promise<RepositorySummar
       const text = data.candidates[0].content.parts[0].text;
       resultData = JSON.parse(text);
     } else {
-      // Mock Data for Demo
+      // Mock Data with Mentor Persona
       resultData = {
         name: repo,
-        oneLiner: `${repo} 프로젝트는 혁신적인 AI 기반 오픈소스 솔루션입니다.`,
-        techTags: ["TypeScript", "React", "Tailwind", "Gemini API"],
+        oneLiner: `🚀 ${repo}는 당신의 개발 여정에서 든든한 등대 같은 프로젝트가 될 거예요!`,
+        techTags: ["TypeScript", "React", "Next.js"],
         environment: "Node.js",
-        summary: `## 📝 프로젝트 개요\n${repo}는 사용자의 워크플로우를 자동화하고 효율성을 극대화하기 위해 설계된 강력한 도구입니다.\n\n## 🛠 기술 스택\n- **Frontend**: React, TypeScript, Tailwind CSS\n- **AI Engine**: Google Gemini 1.5 Pro\n- **Runtime**: Node.js v20+\n\n## 🚀 핵심 기능\n1. **자동 요약**: 긴 README 파일을 한눈에 보기 쉽게 요약합니다.\n2. **기술 스택 감지**: 프로젝트에서 사용된 주요 라이브러리를 자동으로 분석합니다.\n3. **실시간 커뮤니티**: 인벤토리 스타일의 채팅창을 통해 다른 개발자와 소통할 수 있습니다.\n\n## ⚙️ 설치 방법\n\`\`\`bash\ngit clone ${url}\nnpm install\nnpm run dev\n\`\`\``
+        summary: `## 👋 반가워요! 당신의 시니어 멘토입니다.
+
+오늘 제가 분석해본 레포지토리는 바로 **${repo}**입니다. 코드를 살펴보니 정말 흥미로운 구석이 많더군요! 후배님께 도움이 될 만한 핵심 내용들만 '알잘딱'하게 정리해봤어요.
+
+---
+
+### 🛠 기술 스택: 이 프로젝트의 '레시피'
+이 프로젝트는 다음과 같은 재료들로 아주 맛있게 구워졌네요.
+* **언어의 나침반**: TypeScript (타입 안전성을 꽉 잡았네요!)
+* **UI의 조각가**: React & Tailwind CSS
+* **서버의 엔진**: Node.js
+
+### 💡 핵심 기능: 이것만은 꼭 보세요!
+1. **지능형 분석**: README를 마치 커피 한 잔 마시듯 부드럽게 읽고 핵심만 뽑아내요.
+2. **실시간 소통**: 동료들과 즉시 대화할 수 있는 '라이브 인벤토리' 창이 압권이죠.
+
+---
+
+### 📝 멘토의 한마디
+이 프로젝트의 구조는 굉장히 정돈되어 있어요. 특히 관심사 분리가 잘 되어 있어 유지보수 측면에서 배울 점이 아주 많습니다. 한번 깊게 파헤쳐 보시는 걸 강력 추천해요! 
+
+궁금한 게 더 있다면 언제든 물어보세요. 같이 성장해봐요! 💪`
       };
     }
 
@@ -74,7 +90,7 @@ export const summarizeRepository = async (url: string): Promise<RepositorySummar
       description: resultData.oneLiner,
       techTags: resultData.techTags,
       environment: resultData.environment,
-      stars: Math.floor(Math.random() * 5000), // 실제로는 GitHub API에서 가져와야 함
+      stars: Math.floor(Math.random() * 5000),
       summary: resultData.summary,
       createdAt: new Date().toISOString(),
     };
@@ -82,7 +98,7 @@ export const summarizeRepository = async (url: string): Promise<RepositorySummar
     mockCache[url] = newSummary;
     return newSummary;
   } catch (err) {
-    console.error('Gemini API Error:', err);
+    console.error('Mentor API Error:', err);
     throw err;
   }
 };
