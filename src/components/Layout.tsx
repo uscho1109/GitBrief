@@ -64,7 +64,7 @@ export const Layout: React.FC = () => {
               <span className="text-sm font-bold">INVENTORY</span>
             </button>
             <a href="https://github.com" target="_blank" rel="noreferrer">
-              <Github size={24} className="text-gray-400 hover:text-white transition-colors" />
+              <CodeXml size={24} className="text-gray-400 hover:text-white transition-colors" />
             </a>
           </div>
         </div>
