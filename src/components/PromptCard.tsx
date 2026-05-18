@@ -5,7 +5,7 @@ import { RepositorySummary } from '../types';
 export const PromptCard: React.FC<{ repo: RepositorySummary; onClick: () => void }> = ({ repo, onClick }) => {
   const envColors: Record<string, string> = {
     Docker: 'bg-blue-900/40 text-blue-400 border-blue-400/30',
-    Node.js: 'bg-green-900/40 text-green-400 border-green-400/30',
+    'Node.js': 'bg-green-900/40 text-green-400 border-green-400/30',
     Python: 'bg-yellow-900/40 text-yellow-400 border-yellow-400/30',
     Go: 'bg-cyan-900/40 text-cyan-400 border-cyan-400/30',
     Other: 'bg-gray-800 text-gray-400 border-gray-600',
