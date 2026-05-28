@@ -68,16 +68,16 @@ export const summarizeRepository = async (url: string): Promise<RepositorySummar
 
   if (GEMINI_API_KEY) {
     // 2. 주소에서 유저이름과 저장소이름 분리
-    const cleanedUrl = prompt.trim().replace("https://github.com/", "").replace(".git", "");
-    const [owner, extractedRepoName] = cleanedUrl.split("/");
+    const cleanedUrl = url.trim().replace("https://github.com/", "").replace(".git", "");
+    const [extractedOwner, extractedRepoName] = cleanedUrl.split("/");
 
     // 🚨 중간에 return으로 끊지 않고, 올바른 주소일 때만 진짜 AI 로직을 실행하도록 감싸줍니다.
-    if (owner && extractedRepoName) {
+    if (extractedOwner && extractedRepoName) {
       const repoName = extractedRepoName;
 
       try {
         // 3. 깃허브에서 진짜 리드미 글자 가져오기
-        const githubResponse = await fetch(`https://api.github.com/repos/${owner}/${repoName}/readme`, {
+        const githubResponse = await fetch(`https://api.github.com/repos/${extractedOwner}/${repoName}/readme`, {
           headers: { 'Accept': 'application/vnd.github.v3.raw' }
         });
 
