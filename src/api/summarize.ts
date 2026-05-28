@@ -1,7 +1,7 @@
 import { RepositorySummary } from '../types';
 
 const GEMINI_API_URL =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+  'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent';
 
 const cache: Record<string, RepositorySummary> = {};
 
@@ -27,7 +27,6 @@ async function callGemini(apiKey: string, prompt: string): Promise<string> {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { responseMimeType: 'application/json' },
     }),
   });
 
