@@ -117,7 +117,8 @@ export const summarizeRepository = async (url: string): Promise<RepositorySummar
         }
       } catch (error) {
         console.error("Summarize Error:", error);
-        resultData.summary = "## 오류\n데이터를 가져오는 중 알 수 없는 시스템 오류가 발생했습니다.";
+        const errMsg = error instanceof Error ? error.message : String(error);
+        resultData.summary = `## 오류\n데이터를 가져오는 중 알 수 없는 시스템 오류가 발생했습니다: ${errMsg}`;
       }
     } else {
       resultData.summary = "## 오류\n올바른 깃허브 주소 형식이 아닙니다.";
