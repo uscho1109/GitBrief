@@ -10,6 +10,7 @@ import { RepositorySummary } from '../types';
 export const Layout: React.FC = () => {
   const { feed, addSummary } = useStore();
   const [url, setUrl] = useState('');
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedRepo, setSelectedRepo] = useState<RepositorySummary | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -24,11 +25,12 @@ export const Layout: React.FC = () => {
       addSummary(result);
       setSelectedRepo(result);
       setUrl('');
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
-        setErrorMessage(`요약 중 오류 발생: ${msg}`);
-        console.error(err);
-      } finally {
+      setErrorMessage('');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setErrorMessage(`요약 중 오류 발생: ${msg}`);
+      console.error(err);
+    } finally {
       setLoading(false);
     }
   };
@@ -54,7 +56,9 @@ export const Layout: React.FC = () => {
               className="w-full bg-[#161B22] border border-[#30363d] rounded-full py-3 pl-12 pr-4 text-sm focus:outline-none focus:border-[#00F5FF] group-hover:border-[#444c56] transition-all"
             />
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#00F5FF]" size={18} />
+            {loading && <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 text-[#00F5FF] animate-spin" size={18} />}
             {errorMessage && <p className="mt-2 text-center text-red-400">{errorMessage}</p>}
+          <button type="submit" className="hidden" />
           </form>
 
           <div className="flex items-center gap-4">
