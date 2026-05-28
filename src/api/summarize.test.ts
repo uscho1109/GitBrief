@@ -23,4 +23,10 @@ describe('summarizeRepository', () => {
     expect(result.oneLiner).toContain('현재 API 키를 인식하지 못해 가짜 데이터를 출력 중입니다.');
     expect(result.name).toBe('Repository');
   });
+
+  it('should test MoneyPrinterTurbo with real key', async () => {
+    vi.unstubAllEnvs(); // Use real environment variables from .env
+    const result = await summarizeRepository('https://github.com/harry0703/MoneyPrinterTurbo');
+    console.log("Real Result:", result);
+  });
 });

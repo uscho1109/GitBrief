@@ -1,7 +1,7 @@
 import { RepositorySummary } from '../types';
 
 
-const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
 
 const mockCache: Record<string, RepositorySummary> = {};
 
@@ -107,6 +107,7 @@ export const summarizeRepository = async (url: string): Promise<RepositorySummar
           });
 
           const data = await response.json();
+          console.log("Gemini API Response:", JSON.stringify(data, null, 2));
           const text = data.candidates[0].content.parts[0].text;
           
           // 결과 맵핑
@@ -115,6 +116,7 @@ export const summarizeRepository = async (url: string): Promise<RepositorySummar
           resultData.summary = "## 오류\n깃허브 리포지토리를 찾을 수 없거나 README 파일이 없습니다.";
         }
       } catch (error) {
+        console.error("Summarize Error:", error);
         resultData.summary = "## 오류\n데이터를 가져오는 중 알 수 없는 시스템 오류가 발생했습니다.";
       }
     } else {
